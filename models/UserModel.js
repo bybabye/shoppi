@@ -8,6 +8,18 @@ const userModel = new mongoose.Schema({
     name : {
         type : String,
         require : true,
+    },
+    cmnd : {
+        type : String,
+        require : true
+    },
+    avatar : {
+        type : String,
+
+    },
+    supplierId : {
+        type : String,
+        require : true
     }
 })
 
