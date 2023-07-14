@@ -36,15 +36,19 @@ export const SearchProductForId = async (req,res) => {
 }
 
 export const SearchProduct = async (req,res) => {
-    const uid = req.query.categoryId;
-    console.log(uid);
+    const perPage = 10; // 10 san pham moi trang
+    const totalProducts = await ProductModel.countDocuments() // đếm số lượng sản phẩm
+    const toltalPages = Math.ceil(totalProducts / perPage); // Tổng số trang
+    const page = parseInt(req.query.page) || 1; // trang mac dinh la trang 1
+  
+    const skip = (page - 1 ) * perPage ; // số sản phẩm cần bỏ qua 
+    
     try {
-        if(!uid) {
-            const data = await ProductModel.find();
-            return res.send(data);
-        }
-        const data = await ProductModel.find({categoryId : uid});
-        return res.send(data);
+        const data = await ProductModel.find().skip(skip).limit(perPage);
+        return res.send({
+            toltalPages,
+            data
+        });
     } catch (error) {
         return res.status(404).send("BAD REQUEST");
     }
